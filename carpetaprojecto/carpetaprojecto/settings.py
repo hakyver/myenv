@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -77,19 +79,10 @@ WSGI_APPLICATION = 'carpetaprojecto.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get('DB_DRIVER','django.db.backends.mysql'),
-        'HOST':os.environ.get('MYSQL_DB','localhost'),
-        'PORT':os.environ.get('MYSQL_PORT','3306'),
-        'USER': os.environ.get('MYSQL_USER','root'),#aqui tiene que ir el nombre del usuario de la base de datos
-        #'PASSWORD':os.environ.get ('MYSQL_PASSWORD','password'),(aqui tiene que ir la contraseña de la base de datos si no tiene no se coloca)
-        'NAME': os.environ.get ('MYSQL_DB','mi_primera_bs_soulsstyle'),
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-    }
-}
-
+    'default': dj_database_url.config(
+        default='mysql://root:PASSWORD@localhost:3306/mi_primera_bs_soulsstyle',
+        conn_max_age=600,
+        conn_health_checks=True,   )}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -126,7 +119,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
+if not DEBUG:    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
+    # and renames the files with unique names for each version to support long-term caching
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

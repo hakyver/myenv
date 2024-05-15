@@ -1,4 +1,4 @@
-FROM python: 3.11-bookworm
+FROM python:3.7.3-stretch
 WORKDIR /home/app
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1

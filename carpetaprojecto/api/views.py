@@ -13,6 +13,7 @@ from .models import user
 class userViewSet(viewsets.ModelViewSet):
     queryset=user.objects.all()
     serializer_class=userserializer
+
 '''@api_view(['GET','POST'])
 def userview(request):
     if request.method=='GET':

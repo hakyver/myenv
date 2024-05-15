@@ -8,6 +8,11 @@ from .models import user
 
 
 # Create your views here.
+
+    
+class userViewSet(viewsets.ModelViewSet):
+    queryset=user.objects.all()
+    serializer_class=userserializer
 '''@api_view(['GET','POST'])
 def userview(request):
     if request.method=='GET':
@@ -38,7 +43,3 @@ def deleteuser(request,pk):
     user=user.objects.get(id=pk)
     user.delete()
     return Response('user deleted successfully')'''
-    
-class userViewSet(viewsets.ModelViewSet):
-    queryset=user.objects.all()
-    serializer_class=userserializer

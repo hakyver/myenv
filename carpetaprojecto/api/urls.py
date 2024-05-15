@@ -1,9 +1,10 @@
 from django.urls import path, include
-from rest_framework import routers,viewsets
+from rest_framework import routers
 from .api import userViewSet
 
 router = routers.DefaultRouter()
-router.register('api/users',userViewSet,'api')
+router.register('api/users', userViewSet)
 
-
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include(router.urls)),
+]
